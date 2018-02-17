@@ -7,10 +7,12 @@ package taskers;
 
 import java.util.ArrayList;
 import javafx.application.Platform;
+import javafx.scene.control.Button;
+import notifcationexamples.setTaskState;
 
 /**
  *
- * @author dalemusser
+ * @author Shiqi Wang
  * 
  * This example uses a Notification functional interface.
  * This allows the use of anonymous inner classes or
@@ -21,29 +23,36 @@ public class Task2 extends Thread {
     
     private int maxValue, notifyEvery;
     boolean exit = false;
-    
+    private setTaskState task2;
     private ArrayList<Notification> notifications = new ArrayList<>();
+    private Button button;
     
-    public Task2(int maxValue, int notifyEvery)  {
+    public Task2(int maxValue, int notifyEvery, Button button )  {
         this.maxValue = maxValue;
         this.notifyEvery = notifyEvery;
+        this.button = button;
+        this.task2 = task2.STOP;
     }
     
     @Override
     public void run() {
         doNotify("Started Task2!");
-        
+        task2 = task2.RUN;
         for (int i = 0; i < maxValue; i++) {
             
             if (i % notifyEvery == 0) {
-                doNotify("It happened in Task2: " + i);
+                doNotify("It happened in Task2: " + i + "State: " + task2);
             }
             
             if (exit) {
                 return;
             }
         }
-        doNotify("Task2 done.");
+        task2 = task2.terminate;
+        doNotify("Task2 done. State: " + task2);
+        Platform.runLater(() -> {
+           button.setText("Task 2");   
+        });
     }
     
     public void end() {
@@ -62,5 +71,13 @@ public class Task2 extends Thread {
                 notification.handle(message);
             });
         }
+    }
+    
+    public void settaskstate(setTaskState state2){
+        this.task2 = state2;
+    }
+    
+    public setTaskState gettaskstate(){
+        return this.task2;
     }
 }

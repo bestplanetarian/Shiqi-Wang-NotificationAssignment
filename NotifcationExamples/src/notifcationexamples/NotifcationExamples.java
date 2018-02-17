@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author dalemusser
+ * @author Shiqi Wang
  */
 public class NotifcationExamples extends Application {
     
